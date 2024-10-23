@@ -25,6 +25,7 @@ class PostFactory(DjangoModelFactory):
     content = factory.Faker('paragraph', nb_sentences=3)
     author = factory.SubFactory(UserProfileFactory)
 
+#PostFactory.create_batch(5)
 # Example usage:
 # books = BookFactory.create_batch(10)
 # user = UserProfileFactory().create_batch(5)

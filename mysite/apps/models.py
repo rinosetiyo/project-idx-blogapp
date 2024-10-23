@@ -26,6 +26,7 @@ class Post(models.Model):
     date_posted = models.DateTimeField(default=timezone.now)
     modified_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(UserProfile, on_delete=models.CASCADE, blank=True, null=True)
+    view_count = models.PositiveIntegerField(default=0)
     
     def __str__(self):
         return self.title

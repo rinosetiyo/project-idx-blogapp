@@ -5,5 +5,6 @@ A Django starter template as per the docs: https://docs.djangoproject.com/en/5.0
 ## Update Project Development
 - front end using html, bootstrap, js
 - models just (post, category)
+-- modify models (23 oct 2024)
 - add ckeditor to project (17 oct 2024)
 - add faker and factory_boy (17 oct 2024)
