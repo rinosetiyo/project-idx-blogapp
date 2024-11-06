@@ -1,14 +1,15 @@
 from django.utils import timezone
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class UserProfile(models.Model):
-    user = models.CharField(max_length=200)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)  # User model
     bio = models.TextField(blank=True)  # Optional bio
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True)  # Optional profile picture
 
     def __str__(self):
-        return self.user
+        return self.user.first_name
         
 class Category(models.Model):
     name = models.CharField(max_length=100)  # Category name
@@ -30,3 +31,17 @@ class Post(models.Model):
     
     def __str__(self):
         return self.title
+
+class Comment(models.Model):
+    content = models.TextField()
+    name = models.CharField(max_length=50)
+    email = models.EmailField()
+    date_posted = models.DateTimeField(auto_now_add=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.content
+    
+    class Meta:
+        ordering = ['-date_posted']
