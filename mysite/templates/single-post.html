@@ -134,45 +134,35 @@
                             </div>
                         </div>
                     </div>
-
+                    {% comment %} comment render {% endcomment %}
+                    {% if comments %}
                     <div class="comment-area my-5">
-                        <h3 class="mb-4 text-center">2 Comments</h3>
-                        <div class="comment-area-box media">
+                        <h3 class="mb-4 text-center">{{ comment_count }} Comment{{ comment_count | pluralize }}</h3>
+                        {% for comment in comments %}
+                        <div class="comment-area-box media mb-4">
                             <img alt="" src="images/blog-user-2.jpg" class="img-fluid float-left mr-3 mt-2">
 
                             <div class="media-body ml-4">
-                                <h4 class="mb-0">Micle harison </h4>
+                                <h4 class="mb-0">{{comment.name}}</h4>
                                 <span class="date-comm font-sm text-capitalize text-color"><i
-                                        class="ti-time mr-2"></i>June 7, 2019 </span>
+                                        class="ti-time mr-2"></i>{{comment.date_posted|date}}</span>
 
                                 <div class="comment-content mt-3">
-                                    <p>Lorem ipsum dolor sit amet, usu ut perfecto postulant deterruisset, libris causae
-                                        volutpat at est, ius id modus laoreet urbanitas. Mel ei delenit dolores.</p>
-                                </div>
-                                <div class="comment-meta mt-4 mt-lg-0 mt-md-0">
-                                    <a href="#" class="text-underline ">Reply</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="comment-area-box media mt-5">
-                            <img alt="" src="images/blog-user-3.jpg" class="mt-2 img-fluid float-left mr-3">
-
-                            <div class="media-body ml-4">
-                                <h4 class="mb-0 ">John Doe </h4>
-                                <span class="date-comm font-sm text-capitalize text-color"><i
-                                        class="ti-time mr-2"></i>June 7, 2019 </span>
-
-                                <div class="comment-content mt-3">
-                                    <p>Some consultants are employed indirectly by the client via a consultancy staffing
-                                        company. </p>
+                                    <p>{{comment.content}}</p>
                                 </div>
                                 <div class="comment-meta mt-4 mt-lg-0 mt-md-0">
                                     <a href="#" class="text-underline">Reply</a>
                                 </div>
                             </div>
                         </div>
+                        {% endfor %}
                     </div>
+                    {% else %}
+                    <div class="comment-area my-5">
+                        <h3 class="mb-4 text-center">No Comments</h3>
+                    </div>
+                    {% endif %}
+                    {% comment %} end comment render {% endcomment %}
                     {% comment %} start comment {% endcomment %}
                     <form class="comment-form mb-5 gray-bg p-5" method="post" action="#" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -261,10 +251,10 @@
                             <div class="sidebar-widget category mb-5">
                                 <h4 class="text-center widget-title">Catgeories</h4>
                                 <ul class="list-unstyled">
-                                    {% for post in category_by_author %}
+                                    {% for post in categories %}
                                     <li class="align-items-center d-flex justify-content-between">
-                                        <a href="#">{{post.category_name}}</a>
-                                        <span>14</span>
+                                        <a href="#">{{post.name}}</a>
+                                        <span>1</span>
                                     </li>
                                     {% endfor %}
                                 </ul>
@@ -286,4 +276,29 @@
             </div>
         </div>
     </section>
+
+
+
+
+{% comment %} reply modal {% endcomment %}
+<!-- Button trigger modal -->
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% comment %} end reply modal {% endcomment %}
 {% include "includes/footer.html" %}

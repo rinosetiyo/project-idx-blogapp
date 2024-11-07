@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from apps.models import Post
+from apps.models import Post, Comment, Category
 from apps.forms import CommentForm
 
 # Create your views here.
@@ -11,9 +11,11 @@ def index(request):
     return render(request,'index.html', context)
 
 def post_detail(request, slug):
-    comment_form = CommentForm()
     post = get_object_or_404(Post, slug=slug)
-    category_by_author = Post.objects.filter(author=post.author).order_by('-date_posted')
+    categories =  Category.objects.all()
+    comment_form = CommentForm()
+    comments = Comment.objects.filter(post=post)
+    comment_count = comments.count()
     post.view_count += 1
     post.save()
 
@@ -22,14 +24,17 @@ def post_detail(request, slug):
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
             postid = request.POST.get("post_id")
+            authorid = request.POST.get("author_id")
             post = Post.objects.get(id=postid)
             comment.post = post
             comment.save()
 
     context = {
         'post': post,
-        'category_by_author': category_by_author,
+        'categories': categories,
         'comment_form': comment_form,
+        'comments': comments,
+        'comment_count': comment_count,
     }
     return render(request, 'single-post.html', context)
 
