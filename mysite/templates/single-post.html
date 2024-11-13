@@ -154,7 +154,47 @@
                                     <a href="#" class="text-underline">Reply</a>
                                 </div>
                             </div>
+                            {% for reply in comment.replies.all %}
+                            <div class="media-body ml-4">
+                                <h4 class="mb-0">{{reply.name}}</h4>
+                                <span class="date-comm font-sm text-capitalize text-color"><i
+                                        class="ti-time mr-2"></i>{{reply.date_posted|date}}</span>
+
+                                <div class="comment-content mt-3">
+                                    <p>{{reply.content}}</p>
+                                </div>
+                                <div class="comment-meta mt-4 mt-lg-0 mt-md-0">
+                                    <a href="#" class="text-underline">Reply</a>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
+                        {% comment %} start comment {% endcomment %}
+                        <form class="comment-form mb-5 gray-bg p-5" method="post" action="#" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <h3 class="mb-4 text-center">Leave a comment</h3>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <textarea class="form-control mb-3" name="content" id="content" cols="30" rows="5"
+                                        placeholder="Comment here..."></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" name="name" id="name" placeholder="Name">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" name="email" id="email" placeholder="Email">
+                                        <input type="hidden" name="post_id" value="{{post.id}}">
+                                        <input type="hidden" name="parent" value="{{comment.id}}">
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <input class="btn btn-primary" type="submit" value="Submit Message">
+                        </form>
+                        {% comment %} end comment {% endcomment %}
                         {% endfor %}
                     </div>
                     {% else %}

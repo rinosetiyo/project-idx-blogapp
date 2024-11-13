@@ -38,6 +38,7 @@ class Comment(models.Model):
     email = models.EmailField()
     date_posted = models.DateTimeField(auto_now_add=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', on_delete=models.DO_NOTHING, blank=True, null=True, related_name='replies')
 
     def __str__(self):
         return self.content

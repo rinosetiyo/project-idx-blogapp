@@ -14,7 +14,7 @@ def post_detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
     categories =  Category.objects.all()
     comment_form = CommentForm()
-    comments = Comment.objects.filter(post=post)
+    comments = Comment.objects.filter(post=post, parent=None)
     comment_count = comments.count()
     post.view_count += 1
     post.save()
@@ -22,12 +22,22 @@ def post_detail(request, slug):
     if request.POST:
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            postid = request.POST.get("post_id")
-            authorid = request.POST.get("author_id")
-            post = Post.objects.get(id=postid)
-            comment.post = post
-            comment.save()
+            parent_obj = None
+            if request.POST.get('parent'):
+                # save reply
+                parent = request.POST.get('parent')
+                parent_obj = Comment.objects.get(id=parent)
+                if parent_obj:
+                    comment_reply = comment_form.save(commit=False)
+                    comment_reply.parent = parent_obj
+                    comment_reply.post = post
+                    comment_reply.save()
+            else:      
+                comment = comment_form.save(commit=False)
+                postid = request.POST.get("post_id")
+                post = Post.objects.get(id=postid)
+                comment.post = post
+                comment.save()
 
     context = {
         'post': post,
