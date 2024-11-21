@@ -9,9 +9,7 @@
                         <div class="post-header mb-5 text-center">
                             <div class="meta-cat">
                                 <a class="post-category font-extra text-color text-uppercase font-sm letter-spacing-1"
-                                    href="#">Health ,</a>
-                                <a class="post-category font-extra text-color text-uppercase font-sm letter-spacing-1"
-                                    href="#">lifestyle</a>
+                                    href="#">{{post.category_name}}</a>
                             </div>
                             <h2 class="post-title mt-2">
                                 {{post.title}}
@@ -29,13 +27,11 @@
                             <div class="entry-content">
                                 <p>{{post.content}}</p>
                             </div>
-
+                            {% for tag in post.tags.all %}
                             <div class="post-tags py-4">
-                                <a href="#">#Health</a>
-                                <a href="#">#Game</a>
-                                <a href="#">#Tour</a>
+                                <a href="#">#{{tag.name}}</a>
                             </div>
-
+                            {% endfor %}
 
                             <div
                                 class="tags-share-box center-box d-flex text-center justify-content-between border-top border-bottom py-3">
@@ -135,11 +131,13 @@
                         </div>
                     </div>
                     {% comment %} comment render {% endcomment %}
+                   {% comment %} comment render {% endcomment %}
                     {% if comments %}
                     <div class="comment-area my-5">
                         <h3 class="mb-4 text-center">{{ comment_count }} Comment{{ comment_count | pluralize }}</h3>
                         {% for comment in comments %}
-                        <div class="comment-area-box media mb-4">
+                        <div class="comment-area
+                    -box media mb-4">
                             <img alt="" src="images/blog-user-2.jpg" class="img-fluid float-left mr-3 mt-2">
 
                             <div class="media-body ml-4">
@@ -148,14 +146,17 @@
                                         class="ti-time mr-2"></i>{{comment.date_posted|date}}</span>
 
                                 <div class="comment-content mt-3">
-                                    <p>{{comment.content}}</p>
+                                    <
+                    p>{{comment.content}}</p>
                                 </div>
                                 <div class="comment-meta mt-4 mt-lg-0 mt-md-0">
-                                    <a href="#" class="text-underline">Reply</a>
+                                    <a href="#" class="text-underline" data-toggle="modal" data-target="#replyModal{{ comment.id }}">Reply</a>
                                 </div>
                             </div>
+                            
+                            <!-- Replies are indented -->
                             {% for reply in comment.replies.all %}
-                            <div class="media-body ml-4">
+                            <div class="media-body ml-4 pl-4 border-left"> 
                                 <h4 class="mb-0">{{reply.name}}</h4>
                                 <span class="date-comm font-sm text-capitalize text-color"><i
                                         class="ti-time mr-2"></i>{{reply.date_posted|date}}</span>
@@ -163,38 +164,49 @@
                                 <div class="comment-content mt-3">
                                     <p>{{reply.content}}</p>
                                 </div>
-                                <div class="comment-meta mt-4 mt-lg-0 mt-md-0">
-                                    <a href="#" class="text-underline">Reply</a>
-                                </div>
+                                
                             </div>
                             {% endfor %}
                         </div>
-                        {% comment %} start comment {% endcomment %}
-                        <form class="comment-form mb-5 gray-bg p-5" method="post" action="#" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <h3 class="mb-4 text-center">Leave a comment</h3>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <textarea class="form-control mb-3" name="content" id="content" cols="30" rows="5"
-                                        placeholder="Comment here..."></textarea>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" name="name" id="name" placeholder="Name">
+
+                        <!-- Reply Modal -->
+                        <div class="modal fade" id="replyModal{{ comment.id }}" tabindex="-1" role="dialog
+                    " aria-labelledby="replyModalLabel{{ comment.id }}" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="replyModalLabel{{ comment.id }}">Reply to {{ comment.name }}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" name="email" id="email" placeholder="Email">
-                                        <input type="hidden" name="post_id" value="{{post.id}}">
-                                        <input type="hidden" name="parent" value="{{comment.id}}">
+                                    <div class="modal-body">
+                                        <form class="comment-form" method="post" action="#" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <textarea class="form-control mb-3" name="content" id="content" cols="30" rows="5"
+                                                        placeholder="Comment here..."></textarea>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <input class="form-control" type="text" name="name" id="name" placeholder="Name">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <input class="form-control" type="text" name="email" id="email" placeholder="Email">
+                                                        <input type="hidden" name="post_id" value="{{post.id}}">
+                                                        <input type="hidden" name="parent" value="{{comment.id}}"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Submit Reply</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
-    
-                            <input class="btn btn-primary" type="submit" value="Submit Message">
-                        </form>
-                        {% comment %} end comment {% endcomment %}
+                        </div>
                         {% endfor %}
                     </div>
                     {% else %}

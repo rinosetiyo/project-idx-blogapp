@@ -2,6 +2,11 @@
 
 A Django starter template as per the docs: https://docs.djangoproject.com/en/5.0/intro/tutorial01/
 
+## Apps Features
+- Post
+- Tag (completed)
+- Comment
+
 ## Update Project Development
 - comment and reply features completed (13 nov 2024)
 - front end using html, bootstrap, js

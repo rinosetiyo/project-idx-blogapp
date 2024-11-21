@@ -1,10 +1,22 @@
 from django.shortcuts import render, get_object_or_404
-from apps.models import Post, Comment, Category
+from apps.models import Post, Comment, Category, WebsiteMeta
 from apps.forms import CommentForm
 
 # Create your views here.
 def index(request):
     posts = Post.objects.all().order_by('-date_posted')
+    featured_blog = Post.objects.filter(is_featured=True).order_by('-date_posted')
+
+    if featured_blog:
+        featured_blog = featured_blog[0]
+    else:
+        featured_blog = None
+
+    if WebsiteMeta.objects.all().exists():
+        meta = WebsiteMeta.objects.all()[0]
+    else:
+        meta = None
+
     context = {
         'posts': posts
     }

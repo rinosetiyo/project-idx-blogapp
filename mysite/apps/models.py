@@ -19,6 +19,14 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = "Categories"  # For a better display in the admin
 
+class Tag(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=200, blank=True, null=True)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
+
 class Post(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, blank=True, null=True)
@@ -27,6 +35,8 @@ class Post(models.Model):
     date_posted = models.DateTimeField(default=timezone.now)
     modified_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(UserProfile, on_delete=models.CASCADE, blank=True, null=True)
+    tags = models.ManyToManyField(Tag, blank=True)
+    is_featured = models.BooleanField(default=False)
     view_count = models.PositiveIntegerField(default=0)
     
     def __str__(self):
@@ -45,3 +55,12 @@ class Comment(models.Model):
     
     class Meta:
         ordering = ['-date_posted']
+
+class WebsiteMeta(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    about = models.TextField()
+    
+    def __str__(self):
+        return self.title
+
