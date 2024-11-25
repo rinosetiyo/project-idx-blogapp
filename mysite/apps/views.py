@@ -24,6 +24,7 @@ def index(request):
 
 def post_detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
+    post_by_author = Post.objects.filter(author=post.author).order_by('-date_posted')
     categories =  Category.objects.all()
     comment_form = CommentForm()
     comments = Comment.objects.filter(post=post, parent=None)
@@ -57,6 +58,7 @@ def post_detail(request, slug):
         'comment_form': comment_form,
         'comments': comments,
         'comment_count': comment_count,
+        'post_by_author': post_by_author,
     }
     return render(request, 'single-post.html', context)
 

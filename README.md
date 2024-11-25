@@ -5,7 +5,7 @@ A Django starter template as per the docs: https://docs.djangoproject.com/en/5.0
 ## Apps Features
 - Post
 - Tag (completed)
-- Comment
+- Comments (completed) 25/11/2024
 
 ## Update Project Development
 - comment and reply features completed (13 nov 2024)
